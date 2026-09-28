@@ -53,7 +53,7 @@ public class ProductService(MyDatabaseConnection db)
     public void Delete(string productId)
     {
         var product = db.Products.FirstOrDefault(p => p.ProductId == productId) ??
-                      throw new ValidationException("That book doesn't exist");
+                      throw new ValidationException("That product doesn't exist");
         db.Delete(product);
     }
 }
