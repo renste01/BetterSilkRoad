@@ -1,24 +1,33 @@
-import { APITester } from "./APITester";
+import { useState } from "react";
 import "./index.css";
+import Login from "./Login";
 
-import logo from "./logo.svg";
-import reactLogo from "./react.svg";
+const KEY = "satinroad_user";
 
 export function App() {
-  return (
-    <div className="app">
-      <div className="logo-container">
-        <img src={logo} alt="Bun Logo" className="logo bun-logo" />
-        <img src={reactLogo} alt="React Logo" className="logo react-logo" />
-      </div>
+    const [user, setUser] = useState<string | null>(() => localStorage.getItem(KEY));
 
-      <h1>Bun + React</h1>
-      <p>
-        Edit <code>src/App.tsx</code> and save to test HMR
-      </p>
-      <APITester />
-    </div>
-  );
+    // Mock login: any email and password is accepted.
+    // Swap this for the real API call when the backend is ready.
+    async function handleLogin(email: string) {
+        localStorage.setItem(KEY, email);
+        setUser(email);
+    }
+
+    function handleLogout() {
+        localStorage.removeItem(KEY);
+        setUser(null);
+    }
+
+    if (!user) return <Login onLogin={handleLogin} />;
+
+    return (
+        <main className="home">
+            <h1>Welcome to Satin Road</h1>
+            <p>Signed in as {user}</p>
+            <button onClick={handleLogout}>Sign out</button>
+        </main>
+    );
 }
 
 export default App;

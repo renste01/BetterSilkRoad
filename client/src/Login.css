@@ -1,0 +1,113 @@
+:root {
+    --ink: #1f1a3d;
+    --satin: #c9b8f0;
+    --pearl: #f6f3fa;
+    --brass: #b8893b;
+    --danger: #a3283b;
+}
+
+.login {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+    background: linear-gradient(160deg, var(--ink) 0%, #35286b 100%);
+    font-family: "Fraunces", Georgia, "Times New Roman", serif;
+}
+
+.login__card {
+    width: 100%;
+    max-width: 24rem;
+    padding: 2.25rem 2rem;
+    background: var(--pearl);
+    border-radius: 6px;
+    border-top: 4px solid var(--brass);
+    color: var(--ink);
+}
+
+.login__title {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.login__sub {
+    margin: 0.4rem 0 1.75rem;
+    color: #5a5478;
+    line-height: 1.5;
+}
+
+.login__field {
+    display: block;
+    margin-bottom: 1.1rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.login__field input {
+    display: block;
+    width: 100%;
+    margin-top: 0.35rem;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid #b7afd0;
+    border-radius: 4px;
+    background: #fff;
+    font: inherit;
+    font-weight: 400;
+    color: var(--ink);
+    box-sizing: border-box;
+}
+
+.login__field input:focus-visible,
+.login__btn:focus-visible,
+.login__alt a:focus-visible {
+    outline: 3px solid var(--brass);
+    outline-offset: 2px;
+}
+
+.login__error {
+    margin: 0 0 1rem;
+    color: var(--danger);
+    font-size: 0.9rem;
+}
+
+.login__btn {
+    width: 100%;
+    padding: 0.75rem;
+    border: 0;
+    border-radius: 4px;
+    background: var(--ink);
+    color: var(--pearl);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.login__btn:hover:not(:disabled) {
+    background: #35286b;
+}
+
+.login__btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.login__alt {
+    margin: 1.4rem 0 0;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.login__alt a {
+    color: var(--ink);
+    font-weight: 600;
+}
+
+.home {
+    padding: 2rem;
+    text-align: center;
+}
