@@ -1,6 +1,6 @@
 ﻿using LinqToDB.Mapping;
 
-namespace Infra;
+namespace Infra.Entities;
 
 public class User
 {
