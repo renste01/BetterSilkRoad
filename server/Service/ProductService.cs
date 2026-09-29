@@ -7,7 +7,7 @@ using LinqToDB;
 
 namespace Service;
 
-public class ProductService(MyDatabaseConnection db)
+public class ProductService(DatabaseConnection db)
 {
     // Create
     public void Create(CreateProductRequestDto requestDto)

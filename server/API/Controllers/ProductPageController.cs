@@ -7,7 +7,7 @@ using Service.Dtos;
 
 namespace API;
 
-public class ProductPageController(ProductService service, MyDatabaseConnection dbc) : ControllerBase
+public class ProductPageController(ProductService service, DatabaseConnection dbc) : ControllerBase
 {
     // Create product
     [HttpPost(nameof(CreateProduct))]

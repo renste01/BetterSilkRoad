@@ -12,6 +12,6 @@ public class Product
     [Column]public decimal Price { get; set; }
     [Column]public int Quantity { get; set; }
     
-    [Association(ThisKey = nameof(SellerId), OtherKey = nameof(User.UserId))]
+    [Association(ThisKey = nameof(SellerId), OtherKey = nameof(User.Id))]
     public User Seller { get; set; }
 }
