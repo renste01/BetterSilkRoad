@@ -2,7 +2,14 @@
 using LinqToDB;
 using LinqToDB.Data;
 
-public class DatabaseConnections
+namespace Infra;
+
+public class DatabaseConnections : DataConnection
 {
-    
+    public DatabaseConnections(DataOptions<DatabaseConnections> options)
+        : base(options.Options)
+    {
+    }
+
+    public ITable<User> Users => this.GetTable<User>();
 }
