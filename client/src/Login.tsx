@@ -1,8 +1,8 @@
 import { useState, type FormEvent } from "react";
-import "./login.css";
+import "./Login.css";
 
 type LoginProps = {
-    // Wire this to your swagger-typescript-api client, e.g.
+    // Wire this to swagger-typescript-api client, e.g.
     // (email, password) => api.auth.login({ email, password }).then(res => save token)
     onLogin: (email: string, password: string) => Promise<void>;
 };
