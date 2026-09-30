@@ -17,7 +17,7 @@ public class ProductService(DatabaseConnection db)
           ProductId  = Guid.NewGuid().ToString(),
           ProductName = requestDto.ProductName,
           SellerId = requestDto.SellerId,
-          ProductDesription = requestDto.ProductDescription,
+          ProductDesribtion = requestDto.ProductDescribtion,
           Price = requestDto.Price,
           ProductCategory = requestDto.ProductCategory,
           Quantity = requestDto.Quantity
@@ -37,8 +37,8 @@ public class ProductService(DatabaseConnection db)
                       throw new ValidationException("That product doesn't exist");
         if (requestDto.NewProductName != null)
             product.ProductName = requestDto.NewProductName;
-        if (requestDto.NewProductDescription != null)
-            product.ProductDesription = requestDto.NewProductDescription;
+        if (requestDto.NewProductDescribtion != null)
+            product.ProductDesribtion = requestDto.NewProductDescribtion;
         if (requestDto.NewPrice != null)
             product.Price = (decimal)requestDto.NewPrice;
         if (requestDto.NewProductCategory != null)
