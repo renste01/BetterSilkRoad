@@ -2,12 +2,11 @@ import { useState, type FormEvent } from "react";
 import "./Login.css";
 
 type LoginProps = {
-    // Wire this to swagger-typescript-api client, e.g.
-    // (email, password) => api.auth.login({ email, password }).then(res => save token)
     onLogin: (email: string, password: string) => Promise<void>;
+    onSwitchToRegister: () => void;
 };
 
-export default function Login({ onLogin }: LoginProps) {
+export default function Login({ onLogin, onSwitchToRegister }: LoginProps) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
@@ -67,7 +66,10 @@ export default function Login({ onLogin }: LoginProps) {
                 </form>
 
                 <p className="login__alt">
-                    New here? <a href="/register">Create an account</a>
+                    New here?{" "}
+                    <button type="button" className="login__link" onClick={onSwitchToRegister}>
+                        Create an account
+                    </button>
                 </p>
             </section>
         </main>
