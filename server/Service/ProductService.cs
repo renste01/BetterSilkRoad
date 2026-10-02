@@ -9,6 +9,21 @@ namespace Service;
 
 public class ProductService(DatabaseConnection db)
 {
+    private static ProductResponseDto ToResponseDto(Product product)
+    {
+        return new ProductResponseDto
+        {
+            ProductId = product.ProductId,
+            ProductName = product.ProductName,
+            ProductDescription = product.ProductDescription,
+            ProductCategory = product.ProductCategory,
+            Price = product.Price,
+            Quantity = product.Quantity,
+            SellerId = product.SellerId,
+            ImageUrl = product.ImageUrl
+        };
+    }
+    
     // Create
     public void Create(CreateProductRequestDto requestDto)
     {
@@ -16,18 +31,38 @@ public class ProductService(DatabaseConnection db)
         {
           ProductId  = Guid.NewGuid().ToString(),
           ProductName = requestDto.ProductName,
-          SellerId = requestDto.SellerId,
-          ProductDescribtion = requestDto.ProductDescribtion,
+          SellerId = requestDto.SellerId, 
+          ProductDescription = requestDto.ProductDescription,
           Price = requestDto.Price,
           ProductCategory = requestDto.ProductCategory,
-          Quantity = requestDto.Quantity
+          Quantity = requestDto.Quantity,
+          ImageUrl = requestDto.ImageUrl
         });
+        var sellerExists = db.Users.Any(user => user.Id == requestDto.SellerId);
+
+        if (!sellerExists)
+        {
+            throw new ValidationException("The seller does not exist.");
+        }
+        
     }
 
     // Read
-    public List<Product> GetAll()
+    public List<ProductResponseDto> GetAll()
     {
-        return db.Products.LoadWith(p => p.Seller).ToList();
+        return db.Products
+            .ToList()
+            .Select(ToResponseDto)
+            .ToList();
+        
+        
+    }
+
+    public ProductResponseDto? GetById(string productId)
+    {
+        var product = db.Products.FirstOrDefault(p => p.ProductId == productId);
+
+        return product == null ? null : ToResponseDto(product);
     }
     
     // Update
@@ -37,8 +72,8 @@ public class ProductService(DatabaseConnection db)
                       throw new ValidationException("That product doesn't exist");
         if (requestDto.NewProductName != null)
             product.ProductName = requestDto.NewProductName;
-        if (requestDto.NewProductDescribtion != null)
-            product.ProductDescribtion = requestDto.NewProductDescribtion;
+        if (requestDto.NewProductDescription != null)
+            product.ProductDescription = requestDto.NewProductDescription;
         if (requestDto.NewPrice != null)
             product.Price = (decimal)requestDto.NewPrice;
         if (requestDto.NewProductCategory != null)
