@@ -10,16 +10,17 @@ public class ProductPageController(ProductService service) : ControllerBase
 {
     // Create product
     [HttpPost]
-    public void CreateProduct(CreateProductRequestDto requestDto)
+    public ActionResult<ProductResponseDto> CreateProduct(CreateProductRequestDto requestDto)
     {
-        service.Create(requestDto);
+        var product = service.Create(requestDto);
+        return CreatedAtAction(nameof(GetProduct), new { productId = product.ProductId }, product);
     }
     
     // Read Product(s)
     [HttpGet]
     public ActionResult<List<ProductResponseDto>> GetProducts()
     {
-        return service.GetAll();
+        return Ok(service.GetAll());
     }
     
     [HttpGet("{productId}")]
@@ -36,15 +37,19 @@ public class ProductPageController(ProductService service) : ControllerBase
     
     // Update Product
     [HttpPut]
-    public void UpdateProduct(UpdateProductRequestDto requestDto)
+    public ActionResult<ProductResponseDto> UpdateProduct(UpdateProductRequestDto requestDto)
     {
-        service.Update(requestDto);
+        var product = service.Update(requestDto);
+        if (product == null)
+            return NotFound();
+
+        return Ok(product);
     }
     
     // Delete Product
     [HttpDelete("{productId}")]
-    public void DeleteProduct(string productId)
+    public IActionResult DeleteProduct(string productId)
     {
-        service.Delete(productId);
+        return service.Delete(productId) ? NoContent() : NotFound();
     }
 }

@@ -25,19 +25,8 @@ public class ProductService(DatabaseConnection db)
     }
     
     // Create
-    public void Create(CreateProductRequestDto requestDto)
+    public ProductResponseDto Create(CreateProductRequestDto requestDto)
     {
-        db.Insert(new Product
-        {
-          ProductId  = Guid.NewGuid().ToString(),
-          ProductName = requestDto.ProductName,
-          SellerId = requestDto.SellerId, 
-          ProductDescription = requestDto.ProductDescription,
-          Price = requestDto.Price,
-          ProductCategory = requestDto.ProductCategory,
-          Quantity = requestDto.Quantity,
-          ImageUrl = requestDto.ImageUrl
-        });
         var sellerExists = db.Users.Any(user => user.Id == requestDto.SellerId);
 
         if (!sellerExists)
@@ -45,6 +34,20 @@ public class ProductService(DatabaseConnection db)
             throw new ValidationException("The seller does not exist.");
         }
         
+        var product = new Product
+        {
+            ProductId = Guid.NewGuid().ToString(),
+            ProductName = requestDto.ProductName,
+            SellerId = requestDto.SellerId,
+            ProductDescription = requestDto.ProductDescription,
+            Price = requestDto.Price,
+            ProductCategory = requestDto.ProductCategory,
+            Quantity = requestDto.Quantity,
+            ImageUrl = requestDto.ImageUrl
+        };
+
+        db.Insert(product);
+        return ToResponseDto(product);
     }
 
     // Read
@@ -66,10 +69,11 @@ public class ProductService(DatabaseConnection db)
     }
     
     // Update
-    public void Update(UpdateProductRequestDto requestDto)
+    public ProductResponseDto? Update(UpdateProductRequestDto requestDto)
     {
-        var product = db.Products.FirstOrDefault(p => p.ProductId == requestDto.ProductIdForLookup) ??
-                      throw new ValidationException("That product doesn't exist");
+        var product = db.Products.FirstOrDefault(p => p.ProductId == requestDto.ProductIdForLookup);
+        if (product == null)
+            return null;
         if (requestDto.NewProductName != null)
             product.ProductName = requestDto.NewProductName;
         if (requestDto.NewProductDescription != null)
@@ -82,13 +86,17 @@ public class ProductService(DatabaseConnection db)
             product.Quantity = (int)requestDto.NewQuantity;
 
         db.Update(product);
+        return ToResponseDto(product);
     }
     
     //Delete
-    public void Delete(string productId)
+    public bool Delete(string productId)
     {
-        var product = db.Products.FirstOrDefault(p => p.ProductId == productId) ??
-                      throw new ValidationException("That product doesn't exist");
+        var product = db.Products.FirstOrDefault(p => p.ProductId == productId);
+        if (product == null)
+            return false;
+
         db.Delete(product);
+        return true;
     }
 }
