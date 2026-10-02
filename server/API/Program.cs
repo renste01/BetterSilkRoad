@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApiDocument();
 
-builder.Services.AddLinqToDBContext<DatabaseConnections>((provider, options) =>
+builder.Services.AddLinqToDBContext<DatabaseConnection>((provider, options) =>
     options
         .UseSQLite(builder.Configuration.GetConnectionString("Default") ?? "Data Source=satinroad.db", SQLiteProvider.Microsoft)
         .UseDefaultLogging(provider));
@@ -32,8 +32,15 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<DatabaseConnections>();
-    db.CreateTable<User>(tableOptions: TableOptions.CreateIfNotExists);
+    var db = scope.ServiceProvider.GetRequiredService<DatabaseConnection>();
+    try
+    {
+        db.CreateTable<User>();
+    }
+    catch
+    {
+        // Table already exists.
+    }
 }
 
 app.UseCors("Frontend");

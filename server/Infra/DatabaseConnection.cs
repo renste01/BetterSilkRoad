@@ -1,0 +1,16 @@
+﻿using Infra.Entities;
+using LinqToDB;
+using LinqToDB.Data;
+
+namespace Infra;
+
+public class DatabaseConnection : DataConnection
+{
+    public DatabaseConnection(DataOptions<DatabaseConnection> options)
+        : base(options.Options)
+    {
+        
+    }
+    public ITable<Product> Products => this.GetTable<Product>();
+    public ITable<User> Users => this.GetTable<User>();
+}

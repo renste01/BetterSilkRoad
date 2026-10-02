@@ -5,9 +5,9 @@ using LinqToDB.Async;
 
 namespace Service;
 
-public class AuthService(DatabaseConnections db)
+public class AuthService(DatabaseConnection db)
 {
-    private readonly DatabaseConnections _db = db;
+    private readonly DatabaseConnection _db = db;
     
     public async Task<User?> RegisterAsync(string email, string password)
     {
