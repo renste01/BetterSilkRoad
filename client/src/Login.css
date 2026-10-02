@@ -63,7 +63,7 @@
 
 .login__field input:focus-visible,
 .login__btn:focus-visible,
-.login__alt a:focus-visible {
+.login__link:focus-visible {
     outline: 3px solid var(--brass);
     outline-offset: 2px;
 }
@@ -102,9 +102,15 @@
     font-size: 0.9rem;
 }
 
-.login__alt a {
+.login__link {
+    border: 0;
+    padding: 0;
+    background: none;
+    font: inherit;
     color: var(--ink);
     font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 .home {
