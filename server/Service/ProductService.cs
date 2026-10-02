@@ -17,7 +17,7 @@ public class ProductService(DatabaseConnection db)
           ProductId  = Guid.NewGuid().ToString(),
           ProductName = requestDto.ProductName,
           SellerId = requestDto.SellerId,
-          ProductDesribtion = requestDto.ProductDescribtion,
+          ProductDescribtion = requestDto.ProductDescribtion,
           Price = requestDto.Price,
           ProductCategory = requestDto.ProductCategory,
           Quantity = requestDto.Quantity
@@ -38,7 +38,7 @@ public class ProductService(DatabaseConnection db)
         if (requestDto.NewProductName != null)
             product.ProductName = requestDto.NewProductName;
         if (requestDto.NewProductDescribtion != null)
-            product.ProductDesribtion = requestDto.NewProductDescribtion;
+            product.ProductDescribtion = requestDto.NewProductDescribtion;
         if (requestDto.NewPrice != null)
             product.Price = (decimal)requestDto.NewPrice;
         if (requestDto.NewProductCategory != null)
