@@ -14,5 +14,5 @@ public class UpdateProductRequestDto
     [Range(0, int.MaxValue)]
     public int? NewQuantity { get; set; }
     
-    public string? NewImage { get; set; }
+    public string? NewImages { get; set; }
 }

@@ -20,7 +20,7 @@ public class ProductService(DatabaseConnection db)
             Price = product.Price,
             Quantity = product.Quantity,
             SellerId = product.SellerId,
-            Image = product.Image
+            Images = product.Images
         };
     }
     
@@ -43,7 +43,7 @@ public class ProductService(DatabaseConnection db)
             Price = requestDto.Price,
             Category = requestDto.Category,
             Quantity = requestDto.Quantity,
-            Image = requestDto.Image
+            Images = requestDto.Images
         };
 
         db.Insert(product);
@@ -82,6 +82,8 @@ public class ProductService(DatabaseConnection db)
             product.Category = requestDto.NewCategory;
         if (requestDto.NewQuantity != null)
             product.Quantity = (int)requestDto.NewQuantity;
+        if (requestDto.NewImages != null)
+            product.Images = requestDto.NewImages;
 
         db.Update(product);
         return ToResponseDto(product);
