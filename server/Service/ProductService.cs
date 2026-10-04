@@ -15,8 +15,8 @@ public class ProductService(DatabaseConnection db)
         {
             ProductId = product.ProductId,
             ProductName = product.ProductName,
-            ProductDescription = product.ProductDescription,
-            ProductCategory = product.ProductCategory,
+            Description = product.Description,
+            Category = product.Category,
             Price = product.Price,
             Quantity = product.Quantity,
             SellerId = product.SellerId,
@@ -39,9 +39,9 @@ public class ProductService(DatabaseConnection db)
             ProductId = Guid.NewGuid().ToString(),
             ProductName = requestDto.ProductName,
             SellerId = requestDto.SellerId,
-            ProductDescription = requestDto.ProductDescription,
+            Description = requestDto.Description,
             Price = requestDto.Price,
-            ProductCategory = requestDto.ProductCategory,
+            Category = requestDto.Category,
             Quantity = requestDto.Quantity,
             ImageUrl = requestDto.ImageUrl
         };
@@ -57,8 +57,6 @@ public class ProductService(DatabaseConnection db)
             .ToList()
             .Select(ToResponseDto)
             .ToList();
-        
-        
     }
 
     public ProductResponseDto? GetById(string productId)
@@ -76,12 +74,12 @@ public class ProductService(DatabaseConnection db)
             return null;
         if (requestDto.NewProductName != null)
             product.ProductName = requestDto.NewProductName;
-        if (requestDto.NewProductDescription != null)
-            product.ProductDescription = requestDto.NewProductDescription;
+        if (requestDto.NewDescription != null)
+            product.Description = requestDto.NewDescription;
         if (requestDto.NewPrice != null)
             product.Price = (decimal)requestDto.NewPrice;
-        if (requestDto.NewProductCategory != null)
-            product.ProductCategory = requestDto.NewProductCategory;
+        if (requestDto.NewCategory != null)
+            product.Category = requestDto.NewCategory;
         if (requestDto.NewQuantity != null)
             product.Quantity = (int)requestDto.NewQuantity;
 

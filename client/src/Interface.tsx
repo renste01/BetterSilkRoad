@@ -6,9 +6,9 @@ export interface Root {
 }
 
 export interface Product {
-    id: number
-    title: string
-    description: string
+    productid: number
+    ProductName: string
+    Description: string
     category: string
     price: number
     discountPercentage: number

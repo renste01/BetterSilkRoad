@@ -13,11 +13,11 @@ public class CreateProductRequestDto
     
     [Required]
     [MinLength(1)]
-    public string ProductDescription { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
     
     [Required]
     [MinLength(1)]
-    public string ProductCategory { get; set; } = string.Empty;
+    public string Category { get; set; } = string.Empty;
     
     [Range(0, double.MaxValue)]
     public decimal Price { get; set; }

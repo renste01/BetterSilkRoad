@@ -7,8 +7,8 @@ public class UpdateProductRequestDto
     [MinLength(1)]
     public string ProductIdForLookup { get; set; } = string.Empty;
     public string? NewProductName { get; set; }
-    public string? NewProductDescription { get; set; }
-    public string? NewProductCategory { get; set; }
+    public string? NewDescription { get; set; }
+    public string? NewCategory { get; set; }
     [Range(0, double.MaxValue)]
     public decimal? NewPrice { get; set; }
     [Range(0, int.MaxValue)]
