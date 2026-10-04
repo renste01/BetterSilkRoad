@@ -25,5 +25,5 @@ public class CreateProductRequestDto
     [Range(0, double.MaxValue)]
     public int Quantity { get; set; }
     
-    public string? ImageUrl { get; set; }
+    public string? Image { get; set; }
 }

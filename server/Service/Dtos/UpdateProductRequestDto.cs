@@ -13,4 +13,6 @@ public class UpdateProductRequestDto
     public decimal? NewPrice { get; set; }
     [Range(0, int.MaxValue)]
     public int? NewQuantity { get; set; }
+    
+    public string? NewImage { get; set; }
 }

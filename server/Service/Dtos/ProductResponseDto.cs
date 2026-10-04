@@ -9,5 +9,5 @@ public class ProductResponseDto
     public decimal Price { get; set; }
     public int Quantity { get; set; } 
     public int SellerId { get; set; }
-    public string? ImageUrl { get; set; }
+    public string? Image { get; set; }
 }

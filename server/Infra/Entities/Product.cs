@@ -13,7 +13,7 @@ public class Product
     [Column, NotNull] public string Category { get; set; } = string.Empty;
     [Column, NotNull] public decimal Price { get; set; }
     [Column, NotNull] public int Quantity { get; set; }
-    [Column] public string? ImageUrl { get; set; }
+    [Column] public string? Image { get; set; }
     
     [LinqToDB.Mapping.Association(
         ThisKey = nameof(SellerId), 

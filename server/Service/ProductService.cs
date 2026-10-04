@@ -20,7 +20,7 @@ public class ProductService(DatabaseConnection db)
             Price = product.Price,
             Quantity = product.Quantity,
             SellerId = product.SellerId,
-            ImageUrl = product.ImageUrl
+            Image = product.Image
         };
     }
     
@@ -43,7 +43,7 @@ public class ProductService(DatabaseConnection db)
             Price = requestDto.Price,
             Category = requestDto.Category,
             Quantity = requestDto.Quantity,
-            ImageUrl = requestDto.ImageUrl
+            Image = requestDto.Image
         };
 
         db.Insert(product);
