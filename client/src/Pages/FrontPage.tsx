@@ -14,19 +14,19 @@ function ProductCard({product}: ProductCardProps) {
             onMouseLeave={() => setHovered(false)}
             style={{opacity: hovered ? 0.8 : 1, width: 200}}
         >
-            <h3 style={{margin: "0 0 8px", fontSize: 16}}>{product.title}</h3>
+            <h3 style={{margin: "0 0 8px", fontSize: 16}}>{product.productName}</h3>
 
             <div style={{position: "relative", width: 200, height: 200}}>
                 <img
                     src={product.images[0]}
-                    alt={product.title}
+                    alt={product.productName}
                     width={200}
                     height={200}
                     style={{display: "block", objectFit: "cover"}}
                 />
 
                 <button
-                    onClick={() => console.log("Buy", product.id)}
+                    onClick={() => console.log("Buy", product.productid)}
                     style={{position: "absolute", bottom: 8, left: 8}}
                 >
                     Buy
@@ -98,7 +98,7 @@ export function FrontPage() {
 
         <div style={{display: "flex", flexWrap: "wrap", gap: 16}}>
             {products.map(p => (
-                <ProductCard key={p.id} product={p} />
+                <ProductCard key={p.productid} product={p} />
             ))}
         </div>
         </div>

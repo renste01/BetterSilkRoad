@@ -7,8 +7,8 @@ export interface Root {
 
 export interface Product {
     productid: number
-    ProductName: string
-    Description: string
+    productName: string
+    description: string
     category: string
     price: number
     discountPercentage: number
