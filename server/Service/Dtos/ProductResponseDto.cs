@@ -9,5 +9,6 @@ public class ProductResponseDto
     public decimal Price { get; set; }
     public int Quantity { get; set; } 
     public int SellerId { get; set; }
+    public string SellerUsername { get; set; } = string.Empty;
     public string? Images { get; set; }
 }

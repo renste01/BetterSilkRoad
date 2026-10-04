@@ -20,24 +20,28 @@ public class AuthController : ControllerBase
     // throws rather than silently skip validation (which is what happened).
     public record RegisterRequest(
         [Required, EmailAddress] string Email,
-        [Required, MinLength(8)] string Password);
+        [Required, MinLength(8)] string Password,
+        [Required, MinLength(1)] string UserName);
 
     public record LoginRequest(
         [Required, EmailAddress] string Email,
         [Required] string Password);
 
-    public record AuthResponse(int Id, string Email);
+    public record AuthResponse(int Id, string Email, string UserName);
 
     [HttpPost("register")]
     [ProducesResponseType<AuthResponse>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<AuthResponse>> Register(RegisterRequest request)
     {
-        var user = await _authService.RegisterAsync(request.Email, request.Password);
+        var user = await _authService.RegisterAsync(
+            request.Email,
+            request.Password,
+            request.UserName);
         if (user is null)
             return Conflict("An account with that email already exists.");
 
-        return Ok(new AuthResponse(user.Id, user.Email));
+        return Ok(new AuthResponse(user.Id, user.Email, user.UserName));
     }
 
     [HttpPost("login")]
@@ -49,6 +53,6 @@ public class AuthController : ControllerBase
         if (user is null)
             return Unauthorized("Invalid email or password.");
 
-        return Ok(new AuthResponse(user.Id, user.Email));
+        return Ok(new AuthResponse(user.Id, user.Email, user.UserName));
     }
 }

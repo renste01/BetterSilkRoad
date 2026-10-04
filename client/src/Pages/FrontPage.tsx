@@ -1,5 +1,7 @@
 import {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
 import type {Product} from "../Interface.tsx";
+import {getProducts} from "../api/products.ts";
 
 interface ProductCardProps {
     product: Product;
@@ -14,38 +16,59 @@ function ProductCard({product}: ProductCardProps) {
             onMouseLeave={() => setHovered(false)}
             style={{opacity: hovered ? 0.8 : 1, width: 200}}
         >
-            <h3 style={{margin: "0 0 8px", fontSize: 16}}>{product.productName}</h3>
+            <Link
+                to={`/products/${product.productId}`}
+                style={{color: "inherit", textDecoration: "none"}}
+            >
+                <h3 style={{margin: "0 0 8px", fontSize: 16}}>
+                    {product.productName}
+                </h3>
 
-            <div style={{position: "relative", width: 200, height: 200}}>
-                <img
-                    src={product.images[0]}
-                    alt={product.productName}
-                    width={200}
-                    height={200}
-                    style={{display: "block", objectFit: "cover"}}
-                />
+                <div style={{position: "relative", width: 200, height: 200}}>
+                    {product.images ? (
+                        <img
+                            src={product.images}
+                            alt={product.productName}
+                            width={200}
+                            height={200}
+                            style={{display: "block", objectFit: "cover"}}
+                        />
+                    ) : (
+                        <div
+                            style={{
+                                width: 200,
+                                height: 200,
+                                display: "grid",
+                                placeItems: "center",
+                                background: "#eee",
+                            }}
+                        >
+                            No image
+                        </div>
+                    )}
 
-                <button
-                    onClick={() => console.log("Buy", product.productid)}
-                    style={{position: "absolute", bottom: 8, left: 8}}
-                >
-                    Buy
-                </button>
+                    <span
+                        style={{
+                            position: "absolute",
+                            bottom: 8,
+                            right: 8,
+                            background: "rgba(255,255,255,0.85)",
+                            padding: "2px 6px",
+                            borderRadius: 4,
+                            fontWeight: "bold",
+                        }}
+                    >
+                        {product.price}$
+                    </span>
+                </div>
+            </Link>
 
-                <span
-                    style={{
-                        position: "absolute",
-                        bottom: 8,
-                        right: 8,
-                        background: "rgba(255,255,255,0.85)",
-                        padding: "2px 6px",
-                        borderRadius: 4,
-                        fontWeight: "bold",
-                    }}
-                >
-                    {product.price}$
-                </span>
-            </div>
+            <button
+                onClick={() => console.log("Buy", product.productId)}
+                style={{marginTop: 8, cursor: "pointer"}}
+            >
+                Buy
+            </button>
         </div>
     );
 }
@@ -53,54 +76,55 @@ function ProductCard({product}: ProductCardProps) {
 export function FrontPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [query, setQuery] = useState("");
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const url = query.trim()
-            ? `https://dummyjson.com/products/search?q=${encodeURIComponent(query.trim())}`
-            : "https://dummyjson.com/products";
+        getProducts()
+            .then(setProducts)
+            .catch(() => setError("Could not load products."));
+    }, []);
 
-        const timeoutId = setTimeout(() => {
-            fetch(url)
-                .then(res => res.json())
-                .then(json => setProducts(json.products));
-        }, 300);
-
-        return () => clearTimeout(timeoutId);
-    }, [query]);
-
-    interface ProductCardProps {
-        product: Product;
-    }
-
-
+    const visibleProducts = products.filter(product =>
+        product.productName.toLowerCase().includes(query.toLowerCase()),
+    );
 
     return (
         <div>
-        <header
-            style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: "16px 24px",
-                borderBottom: "1px solid #ddd",
-                marginBottom: 24,
-            }}
-        >
-            <h1 style={{margin: 0, fontSize: 48}}>Better Silk Road</h1>
-
-            <button
-                onClick={() => console.log("Sign in / Register")}
-                style={{padding: "8px 16px", fontSize: 16, cursor: "pointer"}}
+            <header
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    padding: "16px 24px",
+                    borderBottom: "1px solid #ddd",
+                    marginBottom: 24,
+                }}
             >
-                Sign in / Register
-            </button>
-        </header>
+                <h1 style={{margin: 0, fontSize: 48}}>Better Silk Road</h1>
 
-        <div style={{display: "flex", flexWrap: "wrap", gap: 16}}>
-            {products.map(p => (
-                <ProductCard key={p.productid} product={p} />
-            ))}
-        </div>
+                <button
+                    onClick={() => console.log("Sign in / Register")}
+                    style={{padding: "8px 16px", fontSize: 16, cursor: "pointer"}}
+                >
+                    Sign in / Register
+                </button>
+            </header>
+
+            <input
+                type="search"
+                placeholder="Search products"
+                value={query}
+                onChange={event => setQuery(event.target.value)}
+                style={{marginBottom: 16, padding: 8}}
+            />
+
+            {error && <p>{error}</p>}
+
+            <div style={{display: "flex", flexWrap: "wrap", gap: 16}}>
+                {visibleProducts.map(product => (
+                    <ProductCard key={product.productId} product={product}/>
+                ))}
+            </div>
         </div>
     );
 }

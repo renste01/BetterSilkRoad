@@ -20,6 +20,7 @@ public class ProductService(DatabaseConnection db)
             Price = product.Price,
             Quantity = product.Quantity,
             SellerId = product.SellerId,
+            SellerUsername = product.Seller?.UserName ?? string.Empty,
             Images = product.Images
         };
     }
@@ -46,6 +47,7 @@ public class ProductService(DatabaseConnection db)
             Images = requestDto.Images
         };
 
+        product.Seller = db.Users.First(user => user.Id == requestDto.SellerId);
         db.Insert(product);
         return ToResponseDto(product);
     }
@@ -54,6 +56,7 @@ public class ProductService(DatabaseConnection db)
     public List<ProductResponseDto> GetAll()
     {
         return db.Products
+            .LoadWith(product => product.Seller)
             .ToList()
             .Select(ToResponseDto)
             .ToList();
@@ -61,7 +64,9 @@ public class ProductService(DatabaseConnection db)
 
     public ProductResponseDto? GetById(string productId)
     {
-        var product = db.Products.FirstOrDefault(p => p.ProductId == productId);
+        var product = db.Products
+            .LoadWith(p => p.Seller)
+            .FirstOrDefault(p => p.ProductId == productId);
 
         return product == null ? null : ToResponseDto(product);
     }
@@ -69,7 +74,9 @@ public class ProductService(DatabaseConnection db)
     // Update
     public ProductResponseDto? Update(UpdateProductRequestDto requestDto)
     {
-        var product = db.Products.FirstOrDefault(p => p.ProductId == requestDto.ProductIdForLookup);
+        var product = db.Products
+            .LoadWith(p => p.Seller)
+            .FirstOrDefault(p => p.ProductId == requestDto.ProductIdForLookup);
         if (product == null)
             return null;
         if (requestDto.NewProductName != null)
