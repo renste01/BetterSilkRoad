@@ -9,3 +9,11 @@ export interface Product {
     sellerUsername: string;
     images?: string;
 }
+export interface CreateProductRequest{
+    productName: string;
+    description: string;
+    category: string;
+    price: number;
+    quantity: number;
+    images?: string;
+}

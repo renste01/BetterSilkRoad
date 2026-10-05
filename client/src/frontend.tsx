@@ -9,6 +9,7 @@ import {createRoot} from "react-dom/client";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import { FrontPage } from "./pages/FrontPage.tsx";
 import {ProductPage} from "./pages/ProductPage.tsx";
+import {CreateListingPage} from "./pages/CreateListingPage.tsx";
 
 
 const elem = document.getElementById("root")!;
@@ -24,6 +25,10 @@ const app = (
             {
                 path: "/products/:productId",
                 element: <ProductPage />
+            },
+            {
+              path: "/createListing",
+              element: <CreateListingPage />
             }
 
         ])} />

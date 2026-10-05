@@ -109,10 +109,16 @@ export function FrontPage() {
 
                 <button
                     onClick={() => console.log("Sign in / Register")}
-                    style={{padding: "8px 16px", fontSize: 16, cursor: "pointer"}}
+                    style={headerButtonStyle}
                 >
                     Sign in / Register
                 </button>
+                <Link
+                    style={headerButtonStyle}
+                    to="/createListing"
+                >
+                    List your product
+                </Link>
             </header>
 
             <input
@@ -172,3 +178,16 @@ function categoryButtonStyle(active: boolean): React.CSSProperties {
         cursor: "pointer",
     };
 }
+
+const headerButtonStyle: React.CSSProperties = {
+    display: "inline-block",
+    boxSizing: "border-box",
+    padding: "8px 16px",
+    border: "1px solid #767676",
+    borderRadius: 2,
+    background: "#efefef",
+    color: "#000",
+    fontSize: 16,
+    textDecoration: "none",
+    cursor: "pointer",
+};

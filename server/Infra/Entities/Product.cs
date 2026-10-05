@@ -17,6 +17,6 @@ public class Product
     
     [LinqToDB.Mapping.Association(
         ThisKey = nameof(SellerId), 
-        OtherKey = nameof(User.Id))]
+        OtherKey = nameof(User.UserName))]
     public User? Seller { get; set; }
 }
