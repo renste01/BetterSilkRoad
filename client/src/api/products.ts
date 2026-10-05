@@ -1,4 +1,4 @@
-import type {Product} from "../Interface.tsx";
+import type {CreateProductRequest, Product} from "../Interface.tsx";
 
 const API_URL = "http://localhost:5153";
 
@@ -24,4 +24,17 @@ export async function getProduct(productId: string): Promise<Product> {
     return getProductResponse(
         await fetch(`${API_URL}/api/products/${encodeURIComponent(productId)}`),
     );
+}
+export async function createProduct(product: CreateProductRequest): Promise<Product>{
+    const response = await fetch(`${API_URL}/api/products`,{
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(product),
+    });
+
+    if(!response.ok){
+        const errorText = await response.text();
+        throw new Error(errorText || `Could not create product (${response.status})`);
+    }
+    return response.json()
 }
