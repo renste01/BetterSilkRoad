@@ -76,6 +76,7 @@ function ProductCard({product}: ProductCardProps) {
 export function FrontPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [query, setQuery] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -83,6 +84,10 @@ export function FrontPage() {
             .then(setProducts)
             .catch(() => setError("Could not load products."));
     }, []);
+
+    const categories = Array.from(
+        new Set(products.map(p => p.category).filter(Boolean) as string[]),
+    ).sort();
 
     const visibleProducts = products.filter(product =>
         product.productName.toLowerCase().includes(query.toLowerCase()),
@@ -120,11 +125,50 @@ export function FrontPage() {
 
             {error && <p>{error}</p>}
 
-            <div style={{display: "flex", flexWrap: "wrap", gap: 16}}>
-                {visibleProducts.map(product => (
-                    <ProductCard key={product.productId} product={product}/>
-                ))}
+            <div style={{display: "flex", gap: 24, alignItems: "flex-start"}}>
+                <aside style={{width: 180, flexShrink: 0}}>
+                    <h2 style={{margin: "0 0 8px", fontSize: 18}}>Categories</h2>
+                    <ul style={{listStyle: "none", margin: 0, padding: 0}}>
+                        <li>
+                            <button
+                                onClick={() => setSelectedCategory(null)}
+                                style={categoryButtonStyle(selectedCategory === null)}
+                            >
+                                All
+                            </button>
+                        </li>
+                        {categories.map(category => (
+                            <li key={category}>
+                                <button
+                                    onClick={() => setSelectedCategory(category)}
+                                    style={categoryButtonStyle(selectedCategory === category)}
+                                >
+                                    {category}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </aside>
+
+                <div style={{display: "flex", flexWrap: "wrap", gap: 16, flex: 1}}>
+                    {visibleProducts.map(product => (
+                        <ProductCard key={product.productId} product={product}/>
+                    ))}
+                </div>
             </div>
         </div>
     );
+}
+
+function categoryButtonStyle(active: boolean): React.CSSProperties {
+    return {
+        display: "block",
+        width: "100%",
+        textAlign: "left",
+        padding: "6px 8px",
+        border: "none",
+        background: active ? "#eee" : "transparent",
+        fontWeight: active ? "bold" : "normal",
+        cursor: "pointer",
+    };
 }
