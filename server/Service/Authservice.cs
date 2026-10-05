@@ -9,7 +9,10 @@ public class AuthService(DatabaseConnection db)
 {
     private readonly DatabaseConnection _db = db;
     
-    public async Task<User?> RegisterAsync(string email, string password)
+    public async Task<User?> RegisterAsync(
+        string email,
+        string password,
+        string userName)
     {
         var normalizedEmail = email.Trim().ToLowerInvariant();
         IQueryable<User> users = _db.Users;
@@ -20,6 +23,7 @@ public class AuthService(DatabaseConnection db)
         var user = new User
         {
             Email = normalizedEmail,
+            UserName = userName.Trim(),
             PasswordHash = PasswordHasher.Hash(password),
             CreatedAtUtc = DateTime.UtcNow,
         };

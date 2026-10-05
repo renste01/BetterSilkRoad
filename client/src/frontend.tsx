@@ -6,8 +6,9 @@
  */
 
 import {createRoot} from "react-dom/client";
-import {createBrowserRouter, RouterProvider} from "react-router";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import { FrontPage } from "./Pages/FrontPage.tsx";
+import {ProductPage} from "./Pages/ProductPage.tsx";
 
 
 const elem = document.getElementById("root")!;
@@ -19,6 +20,10 @@ const app = (
             {
                 path: '/',
                 element: <FrontPage />
+            },
+            {
+                path: "/products/:productId",
+                element: <ProductPage />
             }
 
         ])} />
@@ -35,4 +40,3 @@ if (import.meta.hot) {
     // The hot module reloading API is not available in production.
     createRoot(elem).render(app);
 }
-

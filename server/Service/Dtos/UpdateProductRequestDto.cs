@@ -1,14 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Service.Dtos;
 
 public class UpdateProductRequestDto
 {
-    [NotNull] [MinLength(1)] public string ProductIdForLookup { get; set; }
+    [Required]
+    [MinLength(1)]
+    public string ProductIdForLookup { get; set; } = string.Empty;
     public string? NewProductName { get; set; }
-    public string? NewProductDescribtion { get; set; }
-    public string? NewProductCategory { get; set; }
+    public string? NewDescription { get; set; }
+    public string? NewCategory { get; set; }
+    [Range(0, double.MaxValue)]
     public decimal? NewPrice { get; set; }
+    [Range(0, int.MaxValue)]
     public int? NewQuantity { get; set; }
+    
+    public string? NewImages { get; set; }
 }

@@ -17,6 +17,7 @@ builder.Services.AddLinqToDBContext<DatabaseConnection>((provider, options) =>
         .UseDefaultLogging(provider));
 
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<ProductService>();
 
 // Allows the Bun dev server (localhost:3000) to call this API from the browser.
 builder.Services.AddCors(options =>
@@ -33,14 +34,8 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<DatabaseConnection>();
-    try
-    {
-        db.CreateTable<User>();
-    }
-    catch
-    {
-        // Table already exists.
-    }
+    db.CreateTable<User>(tableOptions: TableOptions.CreateIfNotExists);
+    db.CreateTable<Product>(tableOptions: TableOptions.CreateIfNotExists);
 }
 
 app.UseCors("Frontend");

@@ -9,51 +9,101 @@ namespace Service;
 
 public class ProductService(DatabaseConnection db)
 {
-    // Create
-    public void Create(CreateProductRequestDto requestDto)
+    private static ProductResponseDto ToResponseDto(Product product)
     {
-        db.Insert(new Product
+        return new ProductResponseDto
         {
-          ProductId  = Guid.NewGuid().ToString(),
-          ProductName = requestDto.ProductName,
-          SellerId = requestDto.SellerId,
-          ProductDesribtion = requestDto.ProductDescribtion,
-          Price = requestDto.Price,
-          ProductCategory = requestDto.ProductCategory,
-          Quantity = requestDto.Quantity
-        });
+            ProductId = product.ProductId,
+            ProductName = product.ProductName,
+            Description = product.Description,
+            Category = product.Category,
+            Price = product.Price,
+            Quantity = product.Quantity,
+            SellerId = product.SellerId,
+            SellerUsername = product.Seller?.UserName ?? string.Empty,
+            Images = product.Images
+        };
+    }
+    
+    // Create
+    public ProductResponseDto Create(CreateProductRequestDto requestDto)
+    {
+        var sellerExists = db.Users.Any(user => user.Id == requestDto.SellerId);
+
+        if (!sellerExists)
+        {
+            throw new ValidationException("The seller does not exist.");
+        }
+        
+        var product = new Product
+        {
+            ProductId = Guid.NewGuid().ToString(),
+            ProductName = requestDto.ProductName,
+            SellerId = requestDto.SellerId,
+            Description = requestDto.Description,
+            Price = requestDto.Price,
+            Category = requestDto.Category,
+            Quantity = requestDto.Quantity,
+            Images = requestDto.Images
+        };
+
+        product.Seller = db.Users.First(user => user.Id == requestDto.SellerId);
+        db.Insert(product);
+        return ToResponseDto(product);
     }
 
     // Read
-    public List<Product> GetAll()
+    public List<ProductResponseDto> GetAll()
     {
-        return db.Products.LoadWith(p => p.Seller).ToList();
+        return db.Products
+            .LoadWith(product => product.Seller)
+            .ToList()
+            .Select(ToResponseDto)
+            .ToList();
+    }
+
+    public ProductResponseDto? GetById(string productId)
+    {
+        var product = db.Products
+            .LoadWith(p => p.Seller)
+            .FirstOrDefault(p => p.ProductId == productId);
+
+        return product == null ? null : ToResponseDto(product);
     }
     
     // Update
-    public void Update(UpdateProductRequestDto requestDto)
+    public ProductResponseDto? Update(UpdateProductRequestDto requestDto)
     {
-        var product = db.Products.FirstOrDefault(p => p.ProductId == requestDto.ProductIdForLookup) ??
-                      throw new ValidationException("That product doesn't exist");
+        var product = db.Products
+            .LoadWith(p => p.Seller)
+            .FirstOrDefault(p => p.ProductId == requestDto.ProductIdForLookup);
+        if (product == null)
+            return null;
         if (requestDto.NewProductName != null)
             product.ProductName = requestDto.NewProductName;
-        if (requestDto.NewProductDescribtion != null)
-            product.ProductDesribtion = requestDto.NewProductDescribtion;
+        if (requestDto.NewDescription != null)
+            product.Description = requestDto.NewDescription;
         if (requestDto.NewPrice != null)
             product.Price = (decimal)requestDto.NewPrice;
-        if (requestDto.NewProductCategory != null)
-            product.ProductCategory = requestDto.NewProductCategory;
+        if (requestDto.NewCategory != null)
+            product.Category = requestDto.NewCategory;
         if (requestDto.NewQuantity != null)
             product.Quantity = (int)requestDto.NewQuantity;
+        if (requestDto.NewImages != null)
+            product.Images = requestDto.NewImages;
 
         db.Update(product);
+        return ToResponseDto(product);
     }
     
     //Delete
-    public void Delete(string productId)
+    public bool Delete(string productId)
     {
-        var product = db.Products.FirstOrDefault(p => p.ProductId == productId) ??
-                      throw new ValidationException("That product doesn't exist");
+        var product = db.Products.FirstOrDefault(p => p.ProductId == productId);
+        if (product == null)
+            return false;
+
         db.Delete(product);
+        return true;
     }
 }

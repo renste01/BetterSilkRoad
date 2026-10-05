@@ -1,39 +1,55 @@
-﻿using Infra;
-using Infra.Entities;
-using LinqToDB;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Service;
 using Service.Dtos;
 
 namespace API;
 
-public class ProductPageController(ProductService service, DatabaseConnection dbc) : ControllerBase
+[ApiController]
+[Route("api/products")]
+public class ProductPageController(ProductService service) : ControllerBase
 {
     // Create product
-    [HttpPost(nameof(CreateProduct))]
-    public void CreateProduct(CreateProductRequestDto requestDto)
+    [HttpPost]
+    public ActionResult<ProductResponseDto> CreateProduct(CreateProductRequestDto requestDto)
     {
-        service.Create(requestDto);
+        var product = service.Create(requestDto);
+        return CreatedAtAction(nameof(GetProduct), new { productId = product.ProductId }, product);
     }
     
-    // Read Product
-    [HttpGet(nameof(GetProducts))]
-    public List<Product> GetProducts()
+    // Read Product(s)
+    [HttpGet]
+    public ActionResult<List<ProductResponseDto>> GetProducts()
     {
-        return service.GetAll();
+        return Ok(service.GetAll());
+    }
+    
+    [HttpGet("{productId}")]
+    public ActionResult<ProductResponseDto> GetProduct(string productId)
+    {
+        var product = service.GetById(productId);
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(product);
     }
     
     // Update Product
-    [HttpPut(nameof(UpdateProduct))]
-    public void UpdateProduct(UpdateProductRequestDto requestDto)
+    [HttpPut]
+    public ActionResult<ProductResponseDto> UpdateProduct(UpdateProductRequestDto requestDto)
     {
-        service.Update(requestDto);
+        var product = service.Update(requestDto);
+        if (product == null)
+            return NotFound();
+
+        return Ok(product);
     }
     
     // Delete Product
-    [HttpDelete(nameof(DeleteProduct))]
-    public void DeleteProduct(string productId)
+    [HttpDelete("{productId}")]
+    public IActionResult DeleteProduct(string productId)
     {
-        service.Delete(productId);
+        return service.Delete(productId) ? NoContent() : NotFound();
     }
 }

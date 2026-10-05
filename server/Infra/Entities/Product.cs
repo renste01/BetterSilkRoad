@@ -1,17 +1,22 @@
-﻿using LinqToDB.Mapping;
+﻿using System.ComponentModel.DataAnnotations;
+using LinqToDB.Mapping;
 
 namespace Infra.Entities;
 
+[Table("Products")]
 public class Product
 {
-    [PrimaryKey]public string ProductId { get; set; }
-    [Column]public string ProductName { get; set; }
-    [Column]public string SellerId { get; set; }
-    [Column]public string ProductDesribtion { get; set; }
-    [Column]public string ProductCategory { get; set; }
-    [Column]public decimal Price { get; set; }
-    [Column]public int Quantity { get; set; }
+    [PrimaryKey] public string ProductId { get; set; } = string.Empty;
+    [Column, NotNull] public string ProductName { get; set; } = string.Empty;
+    [Column, NotNull] public int SellerId { get; set; }
+    [Column, NotNull] public string Description { get; set; } = string.Empty;
+    [Column, NotNull] public string Category { get; set; } = string.Empty;
+    [Column, NotNull] public decimal Price { get; set; }
+    [Column, NotNull] public int Quantity { get; set; }
+    [Column] public string? Images { get; set; }
     
-    [Association(ThisKey = nameof(SellerId), OtherKey = nameof(User.Id))]
-    public User Seller { get; set; }
+    [LinqToDB.Mapping.Association(
+        ThisKey = nameof(SellerId), 
+        OtherKey = nameof(User.Id))]
+    public User? Seller { get; set; }
 }
