@@ -7,8 +7,8 @@
 
 import {createRoot} from "react-dom/client";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import { FrontPage } from "./Pages/FrontPage.tsx";
-import {ProductPage} from "./Pages/ProductPage.tsx";
+import { FrontPage } from "./pages/FrontPage.tsx";
+import {ProductPage} from "./pages/ProductPage.tsx";
 
 
 const elem = document.getElementById("root")!;
