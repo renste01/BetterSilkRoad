@@ -46,9 +46,18 @@ export function App() {
         }
     }
 
-    async function handleRegister(email: string, password: string) {
+    async function handleRegister(
+        username: string,
+        email: string,
+        password: string
+    ) {
         try {
-            const res = await api.api.authRegister({ email, password });
+            const res = await api.api.authRegister({
+                userName: username,
+                email,
+                password,
+            });
+
             localStorage.setItem(KEY, res.data.email);
             setUser(res.data.email);
         } catch (err) {

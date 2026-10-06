@@ -23,8 +23,12 @@ export interface LoginRequest {
 }
 
 export interface RegisterRequest {
+    /** @minLength 3 */
+    userName: string;
+
     /** @format email */
     email: string;
+
     /** @minLength 8 */
     password: string;
 }
@@ -307,8 +311,8 @@ export class Api<
          * @request POST:/api/auth/register
          * @response `200` `AuthResponse` Account created
          * @response `400` `ValidationProblemDetails` Validation failed
-         * @response `409` `string` Email already registered
-         */
+         * @response `409` `string` Email or username already registered
+         * */
         authRegister: (data: RegisterRequest, params: RequestParams = {}) =>
             this.request<AuthResponse, ValidationProblemDetails | string>({
                 path: `/api/auth/register`,
