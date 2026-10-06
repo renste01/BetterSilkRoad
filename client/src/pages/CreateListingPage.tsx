@@ -4,6 +4,7 @@ import {createProduct} from "../api/products.ts";
 
 export function CreateListingPage() {
     const navigate = useNavigate();
+    const sellerId = Number(localStorage.getItem("satinroad_user_id"));
     const [productName, setProductName] = useState("");
     const [description, setDescription] = useState("");
     const [category, setCategory] = useState("");
@@ -16,11 +17,18 @@ export function CreateListingPage() {
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         setError(null);
+
+        if (!Number.isInteger(sellerId) || sellerId <= 0) {
+            setError("Please sign in again before creating a listing.");
+            return;
+        }
+
         setIsSaving(true);
 
         try {
             const product = await createProduct({
                 productName: productName.trim(),
+                sellerId,
                 description: description.trim(),
                 category: category.trim(),
                 price: Number(price),

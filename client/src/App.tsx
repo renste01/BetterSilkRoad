@@ -3,9 +3,12 @@ import "./index.css";
 import Login from "./Login";
 import Register from "./Register";
 import { api } from "./api";
+import { useNavigate } from "react-router-dom";
 
 
 const KEY = "satinroad_user";
+const USER_ID_KEY = "satinroad_user_id";
+const TOKEN_KEY = "satinroad_token";
 
 function extractErrorMessage(err: unknown): string {
     if (err instanceof TypeError) {
@@ -33,14 +36,18 @@ function extractErrorMessage(err: unknown): string {
 }
 
 export function App() {
+    const navigate = useNavigate();
     const [user, setUser] = useState<string | null>(() => localStorage.getItem(KEY));
     const [view, setView] = useState<"login" | "register">("login");
 
     async function handleLogin(email: string, password: string) {
         try {
             const res = await api.api.authLogin({ email, password });
-            localStorage.setItem(KEY, res.data.email);
-            setUser(res.data.email);
+            localStorage.setItem(KEY, res.data.userName);
+            localStorage.setItem(USER_ID_KEY, String(res.data.id));
+            localStorage.setItem(TOKEN_KEY, res.data.token);
+            setUser(res.data.userName);
+            setTimeout(() => navigate("/"), 1000);
         } catch (err) {
             throw new Error(extractErrorMessage(err));
         }
@@ -58,17 +65,14 @@ export function App() {
                 password,
             });
 
-            localStorage.setItem(KEY, res.data.email);
-            setUser(res.data.email);
+            localStorage.setItem(KEY, res.data.userName);
+            localStorage.setItem(USER_ID_KEY, String(res.data.id));
+            localStorage.setItem(TOKEN_KEY, res.data.token);
+            setUser(res.data.userName);
+            setTimeout(() => navigate("/"), 5000);
         } catch (err) {
             throw new Error(extractErrorMessage(err));
         }
-    }
-
-    function handleLogout() {
-        localStorage.removeItem(KEY);
-        setUser(null);
-        setView("login");
     }
 
     if (!user) {
@@ -83,7 +87,6 @@ export function App() {
         <main className="home">
             <h1>Welcome to Satin Road</h1>
             <p>Signed in as {user}</p>
-            <button onClick={handleLogout}>Sign out</button>
         </main>
     );
 }

@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import type {Product} from "../Interface.tsx";
 import {getProducts} from "../api/products.ts";
 import {COLOURS} from "../Colours.tsx"
@@ -83,10 +83,14 @@ function ProductCard({product}: ProductCardProps) {
 }
 
 export function FrontPage() {
+    const navigate = useNavigate();
     const [products, setProducts] = useState<Product[]>([]);
     const [query, setQuery] = useState("");
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [userName, setUserName] = useState<string | null>(
+        () => localStorage.getItem("satinroad_user"),
+    );
 
     useEffect(() => {
         getProducts()
@@ -117,34 +121,30 @@ export function FrontPage() {
             >
                 <h1 style={{margin: 0, fontSize: 48, color: COLOURS.text}}>Better Silk Road</h1>
 
-                <Link
-                    to="/login"
-                    style={{
-                        display: "inline-block",
-                        padding: "8px 16px",
-                        fontSize: 18,
-                        cursor: "pointer",
-                        background: COLOURS.accent,
-                        color: COLOURS.bg,
-                        textDecoration: "none",
-                    }}
-                >
-                    Sign in / Register
-                </Link>
-                <Link
-                    to="/createListing"
-                    style={{
-                        display: "inline-block",
-                        padding: "8px 16px",
-                        fontSize: 18,
-                        cursor: "pointer",
-                        background: COLOURS.accent,
-                        color: COLOURS.bg,
-                        textDecoration: "none",
-                    }}
-                >
-                    List your product
-                </Link>
+                <div style={{display: "flex", gap: 12}}>
+                    <Link to="/createListing" style={headerButtonStyle}>
+                        List your product
+                    </Link>
+
+                    {userName ? (
+                        <button
+                            onClick={() => {
+                                localStorage.removeItem("satinroad_user");
+                                localStorage.removeItem("satinroad_user_id");
+                                localStorage.removeItem("satinroad_token");
+                                setUserName(null);
+                                navigate("/login");
+                            }}
+                            style={headerButtonStyle}
+                        >
+                            Sign out
+                        </button>
+                    ) : (
+                        <Link to="/login" style={headerButtonStyle}>
+                            Sign in / Register
+                        </Link>
+                    )}
+                </div>
             </header>
 
             <input
@@ -211,3 +211,15 @@ function categoryButtonStyle(active: boolean): React.CSSProperties {
         cursor: "pointer",
     };
 }
+
+const headerButtonStyle: React.CSSProperties = {
+    display: "inline-block",
+    boxSizing: "border-box",
+    padding: "8px 16px",
+    border: "none",
+    background: COLOURS.accent,
+    color: COLOURS.bg,
+    fontSize: 18,
+    textDecoration: "none",
+    cursor: "pointer",
+};

@@ -14,6 +14,9 @@ export interface AuthResponse {
     email: string;
     /** @format int32 */
     id: number;
+    userName: string;
+    isAdmin: boolean;
+    token: string;
 }
 
 export interface LoginRequest {
