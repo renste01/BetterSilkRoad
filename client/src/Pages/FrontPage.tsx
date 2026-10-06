@@ -120,7 +120,7 @@ export function FrontPage() {
                     onClick={() => console.log("Sign in / Register")}
                     style={{
                         padding: "8px 16px", 
-                        fontSize: 16, 
+                        fontSize: 18, 
                         cursor: "pointer",
                         background: COLOURS.accent,
                         color: COLOURS.bg,}}
