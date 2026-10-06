@@ -2,13 +2,14 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: #4dff8f;
+  background-color: #14211b;
 }
 body {
   margin: 0;
+  box-sizing: content-box;
+  padding: 0;
   display: grid;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
   position: relative;
