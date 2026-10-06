@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import type {Product} from "../Interface.tsx";
 import {getProducts} from "../api/products.ts";
 import {COLOURS} from "../Colours.tsx"
+import "../index.css";
 
 interface ProductCardProps {
     product: Product;
@@ -114,13 +115,13 @@ export function FrontPage() {
                     marginBottom: 24,
                 }}
             >
-                <h1 style={{margin: 0, fontSize: 48}}>Better Silk Road</h1>
+                <h1 style={{margin: 0, fontSize: 48, color: COLOURS.text}}>Better Silk Road</h1>
 
                 <button
                     onClick={() => console.log("Sign in / Register")}
                     style={{
                         padding: "8px 16px", 
-                        fontSize: 16, 
+                        fontSize: 18, 
                         cursor: "pointer",
                         background: COLOURS.accent,
                         color: COLOURS.bg,}}

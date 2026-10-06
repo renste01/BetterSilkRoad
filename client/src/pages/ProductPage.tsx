@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import type {Product} from "../Interface.tsx";
 import {getProduct} from "../api/products.ts";
+import {COLOURS} from "../Colours.tsx"
 
 export function ProductPage() {
     const {productId} = useParams();
@@ -36,7 +37,7 @@ export function ProductPage() {
         <main style={{padding: 24}}>
             <Link to="/">Back to products</Link>
 
-            <h1>{product.productName}</h1>
+            <h1 style={{margin: 0, fontSize: 36, color: COLOURS.text}}>{product.productName}</h1>
 
             {product.images ? (
                 <img
@@ -56,7 +57,14 @@ export function ProductPage() {
             <p>Price: {product.price}$</p>
             <p>In stock: {product.quantity}</p>
 
-            <button onClick={() => console.log("Buy", product.productId)}>
+            <button onClick={() => console.log("Buy", product.productId)}
+            style={{
+                padding: "8px 16px",
+                fontSize: 18,
+                width: "80px",
+                cursor: "pointer",
+                background: COLOURS.accent,
+                color: COLOURS.bg,}}>
                 Buy
             </button>
         </main>
