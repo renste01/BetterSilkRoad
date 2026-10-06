@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 using Service;
 using Service.Dtos;
 
@@ -12,8 +13,15 @@ public class ProductPageController(ProductService service) : ControllerBase
     [HttpPost]
     public ActionResult<ProductResponseDto> CreateProduct(CreateProductRequestDto requestDto)
     {
-        var product = service.Create(requestDto);
-        return CreatedAtAction(nameof(GetProduct), new { productId = product.ProductId }, product);
+        try
+        {
+            var product = service.Create(requestDto);
+            return CreatedAtAction(nameof(GetProduct), new { productId = product.ProductId }, product);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
     
     // Read Product(s)
@@ -39,11 +47,18 @@ public class ProductPageController(ProductService service) : ControllerBase
     [HttpPut]
     public ActionResult<ProductResponseDto> UpdateProduct(UpdateProductRequestDto requestDto)
     {
-        var product = service.Update(requestDto);
-        if (product == null)
-            return NotFound();
+        try
+        {
+            var product = service.Update(requestDto);
+            if (product == null)
+                return NotFound();
 
-        return Ok(product);
+            return Ok(product);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
     
     // Delete Product
@@ -52,4 +67,11 @@ public class ProductPageController(ProductService service) : ControllerBase
     {
         return service.Delete(productId) ? NoContent() : NotFound();
     }
+    
+    [HttpGet("categories")]
+    public ActionResult<IReadOnlyList<string>> GetCategories() => Ok(service.GetCategories());
+
+    [HttpGet("category/{category}")]
+    public ActionResult<List<ProductResponseDto>> GetByCategory(string category) =>
+        Ok(service.GetByCategory(category));
 }

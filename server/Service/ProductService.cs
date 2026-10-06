@@ -34,6 +34,11 @@ public class ProductService(DatabaseConnection db)
         {
             throw new ValidationException("The seller does not exist.");
         }
+        if (string.IsNullOrWhiteSpace(requestDto.Category))
+        {
+            throw new ValidationException("Category is required.");
+        }
+        
         
         var product = new Product
         {
@@ -42,7 +47,7 @@ public class ProductService(DatabaseConnection db)
             SellerId = requestDto.SellerId,
             Description = requestDto.Description,
             Price = requestDto.Price,
-            Category = requestDto.Category,
+            Category = requestDto.Category.Trim(),
             Quantity = requestDto.Quantity,
             Images = requestDto.Images
         };
@@ -71,6 +76,27 @@ public class ProductService(DatabaseConnection db)
         return product == null ? null : ToResponseDto(product);
     }
     
+    public List<string> GetCategories()
+    {
+        return db.Products
+            .Select(p => p.Category)
+            .Distinct()
+            .ToList()
+            .Where(c => !string.IsNullOrWhiteSpace(c))
+            .OrderBy(c => c)
+            .ToList();
+    }
+    
+    public List<ProductResponseDto> GetByCategory(string category)
+    {
+        return db.Products
+            .LoadWith(p => p.Seller)
+            .Where(p => p.Category == category)
+            .ToList()
+            .Select(ToResponseDto)
+            .ToList();
+    }
+    
     // Update
     public ProductResponseDto? Update(UpdateProductRequestDto requestDto)
     {
@@ -86,7 +112,11 @@ public class ProductService(DatabaseConnection db)
         if (requestDto.NewPrice != null)
             product.Price = (decimal)requestDto.NewPrice;
         if (requestDto.NewCategory != null)
-            product.Category = requestDto.NewCategory;
+        {
+            if (string.IsNullOrWhiteSpace(requestDto.NewCategory))
+                throw new ValidationException("Category cannot be empty.");
+            product.Category = requestDto.NewCategory.Trim();
+        }
         if (requestDto.NewQuantity != null)
             product.Quantity = (int)requestDto.NewQuantity;
         if (requestDto.NewImages != null)

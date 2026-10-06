@@ -98,7 +98,8 @@ export function FrontPage() {
     ).sort();
 
     const visibleProducts = products.filter(product =>
-        product.productName.toLowerCase().includes(query.toLowerCase()),
+        product.productName.toLowerCase().includes(query.toLowerCase()) &&
+        (selectedCategory === null || product.category === selectedCategory),
     );
 
     return (
