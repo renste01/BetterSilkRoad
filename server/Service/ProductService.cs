@@ -47,7 +47,7 @@ public class ProductService(DatabaseConnection db)
             SellerId = requestDto.SellerId,
             Description = requestDto.Description,
             Price = requestDto.Price,
-            Category = requestDto.Category.Trim(),
+            Category = CleanCategory(requestDto.Category),
             Quantity = requestDto.Quantity,
             Images = requestDto.Images
         };
@@ -76,15 +76,23 @@ public class ProductService(DatabaseConnection db)
         return product == null ? null : ToResponseDto(product);
     }
     
-    public List<string> GetCategories()
-    {
-        return db.Products
-            .Select(p => p.Category)
-            .Distinct()
-            .ToList()
+    public List<string> GetCategories() =>
+        DistinctCategories(db.Products.Select(p => p.Category).ToList());
+
+    public static List<string> DistinctCategories(IEnumerable<string?> categories) =>
+        categories
             .Where(c => !string.IsNullOrWhiteSpace(c))
+            .Select(c => c!.Trim())
+            .Distinct()
             .OrderBy(c => c)
             .ToList();
+
+    public static string CleanCategory(string? category)
+    {
+        if (string.IsNullOrWhiteSpace(category))
+            throw new ValidationException("Category is required.");
+
+        return category.Trim();
     }
     
     public List<ProductResponseDto> GetByCategory(string category)
@@ -112,11 +120,7 @@ public class ProductService(DatabaseConnection db)
         if (requestDto.NewPrice != null)
             product.Price = (decimal)requestDto.NewPrice;
         if (requestDto.NewCategory != null)
-        {
-            if (string.IsNullOrWhiteSpace(requestDto.NewCategory))
-                throw new ValidationException("Category cannot be empty.");
-            product.Category = requestDto.NewCategory.Trim();
-        }
+            product.Category = CleanCategory(requestDto.NewCategory);
         if (requestDto.NewQuantity != null)
             product.Quantity = (int)requestDto.NewQuantity;
         if (requestDto.NewImages != null)
