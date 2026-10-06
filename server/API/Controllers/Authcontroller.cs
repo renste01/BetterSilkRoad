@@ -9,15 +9,18 @@ namespace API.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly AuthService _authService;
+    private readonly JwtTokenService _jwtTokenService;
 
-    public AuthController(AuthService authService)
+    public AuthController(
+        AuthService authService,
+        JwtTokenService jwtTokenService)
     {
         _authService = authService;
+        _jwtTokenService = jwtTokenService;
     }
 
     // No "property:" target here - for record primary constructors, ASP.NET
-    // Core requires validation attributes directly on the parameter, or it
-    // throws rather than silently skip validation (which is what happened).
+    // Core requires validation attributes directly on the parameter.
     public record RegisterRequest(
         [Required, EmailAddress] string Email,
         [Required, MinLength(8)] string Password,
@@ -27,7 +30,12 @@ public class AuthController : ControllerBase
         [Required, EmailAddress] string Email,
         [Required] string Password);
 
-    public record AuthResponse(int Id, string Email, string UserName);
+    public record AuthResponse(
+        int Id,
+        string Email,
+        string UserName,
+        bool IsAdmin,
+        string Token);
 
     [HttpPost("register")]
     [ProducesResponseType<AuthResponse>(StatusCodes.Status200OK)]
@@ -38,10 +46,18 @@ public class AuthController : ControllerBase
             request.Email,
             request.Password,
             request.UserName);
+
         if (user is null)
             return Conflict("An account with that email already exists.");
 
-        return Ok(new AuthResponse(user.Id, user.Email, user.UserName));
+        var token = _jwtTokenService.CreateToken(user);
+
+        return Ok(new AuthResponse(
+            user.Id,
+            user.Email,
+            user.UserName,
+            user.IsAdmin,
+            token));
     }
 
     [HttpPost("login")]
@@ -49,10 +65,20 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<AuthResponse>> Login(LoginRequest request)
     {
-        var user = await _authService.LoginAsync(request.Email, request.Password);
+        var user = await _authService.LoginAsync(
+            request.Email,
+            request.Password);
+
         if (user is null)
             return Unauthorized("Invalid email or password.");
 
-        return Ok(new AuthResponse(user.Id, user.Email, user.UserName));
+        var token = _jwtTokenService.CreateToken(user);
+
+        return Ok(new AuthResponse(
+            user.Id,
+            user.Email,
+            user.UserName,
+            user.IsAdmin,
+            token));
     }
 }

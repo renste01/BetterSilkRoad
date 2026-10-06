@@ -18,6 +18,9 @@ public class User
 
     [Column, NotNull]
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
+
+    [Column, NotNull]
+    public bool IsAdmin { get; set; }
   
     [Association(ThisKey = nameof(Id), OtherKey = nameof(Product.SellerId))]
     public List<Product> Products { get; set; } = new();
