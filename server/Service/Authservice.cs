@@ -20,12 +20,18 @@ public class AuthService(DatabaseConnection db)
         var exists = await users.AnyAsync(u => u.Email == normalizedEmail);
         if (exists) return null;
 
+        // Simple bootstrap for this project: whoever registers first becomes
+        // admin, so there's no separate seeding step needed to test admin
+        // features. Every account after that is a regular user.
+        var isFirstUser = !await users.AnyAsync();
+
         var user = new User
         {
             Email = normalizedEmail,
             UserName = userName.Trim(),
             PasswordHash = PasswordHasher.Hash(password),
             CreatedAtUtc = DateTime.UtcNow,
+            IsAdmin = isFirstUser,
         };
 
         user.Id = await _db.InsertWithInt32IdentityAsync(user);
