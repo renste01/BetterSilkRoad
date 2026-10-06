@@ -128,6 +128,20 @@ export function FrontPage() {
                 >
                     Sign in / Register
                 </button>
+                <Link
+                    to="/createListing"
+                    style={{
+                        display: "inline-block",
+                        padding: "8px 16px",
+                        fontSize: 18,
+                        cursor: "pointer",
+                        background: COLOURS.accent,
+                        color: COLOURS.bg,
+                        textDecoration: "none",
+                    }}
+                >
+                    List your product
+                </Link>
             </header>
 
             <input
