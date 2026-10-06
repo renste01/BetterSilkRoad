@@ -117,17 +117,20 @@ export function FrontPage() {
             >
                 <h1 style={{margin: 0, fontSize: 48, color: COLOURS.text}}>Better Silk Road</h1>
 
-                <button
-                    onClick={() => console.log("Sign in / Register")}
+                <Link
+                    to="/login"
                     style={{
-                        padding: "8px 16px", 
-                        fontSize: 18, 
+                        display: "inline-block",
+                        padding: "8px 16px",
+                        fontSize: 18,
                         cursor: "pointer",
                         background: COLOURS.accent,
-                        color: COLOURS.bg,}}
+                        color: COLOURS.bg,
+                        textDecoration: "none",
+                    }}
                 >
                     Sign in / Register
-                </button>
+                </Link>
                 <Link
                     to="/createListing"
                     style={{

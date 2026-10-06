@@ -3,6 +3,7 @@ using Infra;
 using Infra.Entities;
 using LinqToDB;
 using LinqToDB.AspNet;
+using LinqToDB.Data;
 using LinqToDB.DataProvider.SQLite;
 using LinqToDB.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -65,7 +66,14 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<DatabaseConnection>();
+
     db.CreateTable<User>(tableOptions: TableOptions.CreateIfNotExists);
+
+    db.Execute("""
+               CREATE UNIQUE INDEX IF NOT EXISTS IX_Users_UserName
+               ON Users(UserName);
+               """);
+
     db.CreateTable<Product>(tableOptions: TableOptions.CreateIfNotExists);
     db.CreateTable<Category>(tableOptions: TableOptions.CreateIfNotExists);
 }
