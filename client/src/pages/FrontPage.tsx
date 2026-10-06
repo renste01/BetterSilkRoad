@@ -54,7 +54,7 @@ function ProductCard({product}: ProductCardProps) {
                             position: "absolute",
                             bottom: 8,
                             right: 8,
-                            background: COLLOURS.bg,
+                            background: COLOURS.bg,
                             color: COLOURS.text,
                             padding: "2px 6px",
                             borderRadius: 4,
