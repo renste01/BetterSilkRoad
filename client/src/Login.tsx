@@ -65,7 +65,7 @@ export default function Login({ onLogin, onSwitchToRegister }: LoginProps) {
                         />
                     </label>
 
-                    {error && <p className="login__error" role="alert">{error}</p>}
+                    {error && <p className="login__error" role="alert" style={{color: COLOURS.danger}}>{error}</p>}
 
                     <button className="login__btn" type="submit" disabled={busy || !email || !password} 
                             style={{color: COLOURS.text}}>
