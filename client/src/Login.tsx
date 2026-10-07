@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import "./Login.css";
+import {COLOURS} from "@/Colours.tsx";
 
 type LoginProps = {
     onLogin: (email: string, password: string) => Promise<void>;
@@ -30,13 +31,13 @@ export default function Login({ onLogin, onSwitchToRegister }: LoginProps) {
     }
 
     return (
-        <main className="login">
-            <section className="login__card" aria-labelledby="login-title">
-                <h1 id="login-title" className="login__title">Satin Road</h1>
-                <p className="login__sub">Sign in to buy, sell and manage your listings.</p>
+        <main className="login" style={{background: COLOURS.bg}}>
+            <section className="login__card" aria-labelledby="login-title" style={{background: COLOURS.surface}}>
+                <h1 id="login-title" className="login__title" style={{color: COLOURS.text}}>Satin Road</h1>
+                <p className="login__sub" style={{color: COLOURS.accent}}>Sign in to buy, sell and manage your listings.</p>
 
                 <form onSubmit={handleSubmit} noValidate>
-                    <label className="login__field">
+                    <label className="login__field" style={{color: COLOURS.text}}>
                         Email
                         <input
                             type="email"
@@ -44,10 +45,13 @@ export default function Login({ onLogin, onSwitchToRegister }: LoginProps) {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
+                            style={{background: COLOURS.surface,
+                            borderColor: COLOURS.border,
+                            color: COLOURS.text}}
                         />
                     </label>
 
-                    <label className="login__field">
+                    <label className="login__field" style={{color: COLOURS.text}}>
                         Password
                         <input
                             type="password"
@@ -55,19 +59,23 @@ export default function Login({ onLogin, onSwitchToRegister }: LoginProps) {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
+                            style={{background: COLOURS.surface,
+                                borderColor: COLOURS.border,
+                                color: COLOURS.text}}
                         />
                     </label>
 
-                    {error && <p className="login__error" role="alert">{error}</p>}
+                    {error && <p className="login__error" role="alert" style={{color: COLOURS.danger}}>{error}</p>}
 
-                    <button className="login__btn" type="submit" disabled={busy || !email || !password}>
-                        {busy ? "Signing in…" : "Sign in"}
+                    <button className="login__btn" type="submit" disabled={busy || !email || !password} 
+                            style={{color: COLOURS.text}}>
+                        {busy ? "Signing in…" : "Sign in"} 
                     </button>
                 </form>
 
-                <p className="login__alt">
+                <p className="login__alt" style={{color: COLOURS.text}}>
                     New here?{" "}
-                    <button type="button" className="login__link" onClick={onSwitchToRegister}>
+                    <button type="button" className="login__link" onClick={onSwitchToRegister} style={{color: COLOURS.text}}>
                         Create an account
                     </button>
                 </p>
