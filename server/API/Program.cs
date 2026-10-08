@@ -24,6 +24,7 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<JwtTokenService>();
+builder.Services.AddScoped<PurchaseService>();
 
 // JWT bearer auth: tokens are issued by AuthController on login/register and
 // carry a "role" claim of "Admin" for the account that registered first (see
@@ -76,6 +77,7 @@ using (var scope = app.Services.CreateScope())
 
     db.CreateTable<Product>(tableOptions: TableOptions.CreateIfNotExists);
     db.CreateTable<Category>(tableOptions: TableOptions.CreateIfNotExists);
+    db.CreateTable<Purchase>(tableOptions: TableOptions.CreateIfNotExists);
 }
 
 app.UseCors("Frontend");

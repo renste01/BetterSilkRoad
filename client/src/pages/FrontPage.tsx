@@ -4,6 +4,7 @@ import type {Product} from "../Interface.tsx";
 import {getProducts} from "../api/products.ts";
 import {COLOURS} from "../Colours.tsx"
 import "../index.css";
+import {getCartCount} from "../lib/cart.ts";
 
 interface ProductCardProps {
     product: Product;
@@ -65,19 +66,15 @@ function ProductCard({product}: ProductCardProps) {
                         {product.price}$
                     </span>
                 </div>
-            </Link>
 
-            <button
-                onClick={() => console.log("Buy", product.productId)}
-                style={{
-                    marginTop: 8,
-                    cursor: "pointer",
-                    background: COLOURS.accent,
-                    color: COLOURS.bg,
-                }}
-            >
-                Buy
-            </button>
+                {/* NY: lagerstatus */}
+                <p style={{
+                    margin: "8px 0 0",
+                    color: product.quantity > 0 ? COLOURS.subtext : COLOURS.danger,
+                }}>
+                    {product.quantity > 0 ? `${product.quantity} in stock` : "Sold out"}
+                </p>
+            </Link>
         </div>
     );
 }
@@ -131,6 +128,12 @@ export function FrontPage() {
 
                     <Link to="/createListing" style={headerButtonStyle}>
                         List your product
+                    </Link>
+                    <Link 
+                        to="/cart" style={headerButtonStyle}>Cart ({getCartCount()})
+                    </Link>     
+                    <Link 
+                        to="/purchases" style={headerButtonStyle}>My purchases
                     </Link>
 
                     {userName ? (
