@@ -122,6 +122,13 @@ export function FrontPage() {
                 <h1 style={{margin: 0, fontSize: 48, color: COLOURS.text}}>Better Silk Road</h1>
 
                 <div style={{display: "flex", gap: 12}}>
+                    <Link
+                        to="/inventory"
+                        style={{...headerButtonStyle}}
+                    >
+                        Private inventory
+                    </Link>
+
                     <Link to="/createListing" style={headerButtonStyle}>
                         List your product
                     </Link>

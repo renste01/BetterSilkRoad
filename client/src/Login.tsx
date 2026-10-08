@@ -30,6 +30,22 @@ export default function Login({ onLogin, onSwitchToRegister }: LoginProps) {
         }
     }
 
+    async function login(email: string, password: string): Promise<string | null> {
+        const res = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({email, password}),
+        });
+
+        if (!res.ok) return await res.text();
+
+        const auth = await res.json();
+        localStorage.setItem("satinroad_user", auth.userName);
+        localStorage.setItem("satinroad_user_id", String(auth.id));
+        localStorage.setItem("satinroad_token", auth.token);
+        return null;
+    }
+    
     return (
         <main className="login" style={{background: COLOURS.bg}}>
             <section className="login__card" aria-labelledby="login-title" style={{background: COLOURS.surface}}>
