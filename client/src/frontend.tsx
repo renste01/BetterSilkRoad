@@ -3,6 +3,7 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {FrontPage} from "./pages/FrontPage.tsx";
 import {ProductPage} from "./pages/ProductPage.tsx";
 import {CreateListingPage} from "./pages/CreateListingPage.tsx";
+import {InventoryPage} from "./pages/InventoryPage.tsx";
 import App from "./App";
 
 const elem = document.getElementById("root")!;
@@ -26,6 +27,10 @@ const app = (
                 {
                     path: "/login",
                     element: <App />
+                },
+                {
+                   path: "/inventory", 
+                    element:<InventoryPage/>
                 }
             ])}
         />
