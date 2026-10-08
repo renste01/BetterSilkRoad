@@ -10,15 +10,13 @@
   },
   "dependencies": {
     "react": "^19",
-    "react-dom": "^19",
-    "react-router-dom": "^7.18.4"
+    "react-dom": "^19"
   },
   "devDependencies": {
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/bun": "latest"
   },
-  "module": "src/index.ts",
   "peerDependencies": {
     "typescript": "^7"
   }
