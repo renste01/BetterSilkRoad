@@ -21,6 +21,10 @@ public class CategoriesController(CategoryService service) : ControllerBase
     [Authorize(Roles = Roles.Admin)]
     public ActionResult<CategoryResponseDto> Create(CreateCategoryRequestDto requestDto)
     {
+        if (string.IsNullOrWhiteSpace(requestDto.Name))
+            return BadRequest("Category name is required.");
+        if (service.NameExists(requestDto.Name))
+            return Conflict("A category with that name already exists.");
         var category = service.Create(requestDto);
         return CreatedAtAction(nameof(GetAll), category);
     }
@@ -29,6 +33,10 @@ public class CategoriesController(CategoryService service) : ControllerBase
     [Authorize(Roles = Roles.Admin)]
     public ActionResult<CategoryResponseDto> Update(int id, UpdateCategoryRequestDto requestDto)
     {
+        if (string.IsNullOrWhiteSpace(requestDto.Name))
+            return BadRequest("Category name is required.");
+        if (service.NameExists(requestDto.Name, id))
+            return Conflict("A category with that name already exists.");
         var category = service.Update(id, requestDto);
         return category is null ? NotFound() : Ok(category);
     }

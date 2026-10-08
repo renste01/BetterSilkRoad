@@ -11,7 +11,6 @@ export interface Product {
 }
 export interface CreateProductRequest{
     productName: string;
-    sellerId: number;
     description: string;
     category: string;
     price: number;

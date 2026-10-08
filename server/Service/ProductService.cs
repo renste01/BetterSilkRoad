@@ -26,9 +26,9 @@ public class ProductService(DatabaseConnection db)
     }
     
     // Create
-    public ProductResponseDto Create(CreateProductRequestDto requestDto)
+    public ProductResponseDto Create(CreateProductRequestDto requestDto, int sellerId)
     {
-        var sellerExists = db.Users.Any(user => user.Id == requestDto.SellerId);
+        var sellerExists = db.Users.Any(user => user.Id == sellerId);
 
         if (!sellerExists)
         {
@@ -44,7 +44,7 @@ public class ProductService(DatabaseConnection db)
         {
             ProductId = Guid.NewGuid().ToString(),
             ProductName = requestDto.ProductName,
-            SellerId = requestDto.SellerId,
+            SellerId = sellerId,
             Description = requestDto.Description,
             Price = requestDto.Price,
             Category = CleanCategory(requestDto.Category),
@@ -52,7 +52,7 @@ public class ProductService(DatabaseConnection db)
             Images = requestDto.Images
         };
 
-        product.Seller = db.Users.First(user => user.Id == requestDto.SellerId);
+        product.Seller = db.Users.First(user => user.Id == sellerId);
         db.Insert(product);
         return ToResponseDto(product);
     }

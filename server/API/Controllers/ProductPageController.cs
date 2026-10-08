@@ -12,10 +12,15 @@ public class ProductPageController(ProductService service) : ControllerBase
 {
     // Create product
     [HttpPost]
+    [Authorize]
     public ActionResult<ProductResponseDto> CreateProduct(
         CreateProductRequestDto requestDto)
     {
-        var product = service.Create(requestDto);
+        var callerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!int.TryParse(callerId, out var sellerId))
+            return Unauthorized();
+
+        var product = service.Create(requestDto, sellerId);
 
         return CreatedAtAction(
             nameof(GetProduct),
