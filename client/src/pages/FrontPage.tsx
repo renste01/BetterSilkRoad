@@ -70,10 +70,10 @@ function ProductCard({product}: ProductCardProps) {
             <button
                 onClick={() => console.log("Buy", product.productId)}
                 style={{
-                    marginTop: 8, 
+                    marginTop: 8,
                     cursor: "pointer",
-                background: COLOURS.accent,
-                color: COLOURS.bg,
+                    background: COLOURS.accent,
+                    color: COLOURS.bg,
                 }}
             >
                 Buy
@@ -139,6 +139,7 @@ export function FrontPage() {
                                 localStorage.removeItem("satinroad_user");
                                 localStorage.removeItem("satinroad_user_id");
                                 localStorage.removeItem("satinroad_token");
+                                localStorage.removeItem("satinroad_is_admin");
                                 setUserName(null);
                                 navigate("/login");
                             }}
@@ -151,6 +152,9 @@ export function FrontPage() {
                             Sign in / Register
                         </Link>
                     )}
+                    {userName && localStorage.getItem("satinroad_is_admin") === "true" && (
+                        <Link to="/admin" style={headerButtonStyle}>Admin</Link>
+                    )}
                 </div>
             </header>
 
@@ -160,7 +164,7 @@ export function FrontPage() {
                 value={query}
                 onChange={event => setQuery(event.target.value)}
                 style={{
-                    marginBottom: 16, 
+                    marginBottom: 16,
                     padding: 8,
                     background: COLOURS.surface,
                     color: COLOURS.text,

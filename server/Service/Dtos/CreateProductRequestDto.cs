@@ -9,9 +9,6 @@ public class CreateProductRequestDto
     public string ProductName { get; set; } = string.Empty;
     
     [Required]
-    public int SellerId { get; set; }
-    
-    [Required]
     [MinLength(1)]
     public string Description { get; set; } = string.Empty;
     

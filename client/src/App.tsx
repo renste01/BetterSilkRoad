@@ -46,6 +46,7 @@ export function App() {
             localStorage.setItem(KEY, res.data.userName);
             localStorage.setItem(USER_ID_KEY, String(res.data.id));
             localStorage.setItem(TOKEN_KEY, res.data.token);
+            localStorage.setItem("satinroad_is_admin", String(res.data.isAdmin));
             setUser(res.data.userName);
             setTimeout(() => navigate("/"), 1000);
         } catch (err) {
@@ -68,6 +69,7 @@ export function App() {
             localStorage.setItem(KEY, res.data.userName);
             localStorage.setItem(USER_ID_KEY, String(res.data.id));
             localStorage.setItem(TOKEN_KEY, res.data.token);
+            localStorage.setItem("satinroad_is_admin", String(res.data.isAdmin));
             setUser(res.data.userName);
             setTimeout(() => navigate("/"), 5000);
         } catch (err) {

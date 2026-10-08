@@ -2,6 +2,7 @@
 using Infra.Entities;
 using LinqToDB;
 using Service.Dtos;
+using System.ComponentModel.DataAnnotations;
 
 namespace Service;
 
@@ -30,9 +31,10 @@ public class CategoryService(DatabaseConnection db)
     // Create
     public CategoryResponseDto Create(CreateCategoryRequestDto requestDto)
     {
+        var name = CleanName(requestDto.Name);
         var category = new Category
         {
-            Name = requestDto.Name.Trim(),
+            Name = name,
             Description = requestDto.Description,
         };
 
@@ -47,7 +49,9 @@ public class CategoryService(DatabaseConnection db)
         if (category == null)
             return null;
 
-        category.Name = requestDto.Name.Trim();
+        category.Name = CleanName(requestDto.Name);
+        if (NameExists(category.Name, id))
+            throw new ValidationException("A category with that name already exists.");
         category.Description = requestDto.Description;
 
         db.Update(category);
@@ -63,5 +67,15 @@ public class CategoryService(DatabaseConnection db)
 
         db.Delete(category);
         return true;
+    }
+
+    public bool NameExists(string name, int? exceptId = null) =>
+        db.Categories.Any(c => c.Name.ToLower() == name.Trim().ToLower() && (!exceptId.HasValue || c.Id != exceptId.Value));
+
+    private static string CleanName(string? name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ValidationException("Category name is required.");
+        return name.Trim();
     }
 }

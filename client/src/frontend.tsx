@@ -5,6 +5,7 @@ import {ProductPage} from "./pages/ProductPage.tsx";
 import {CreateListingPage} from "./pages/CreateListingPage.tsx";
 import {InventoryPage} from "./pages/InventoryPage.tsx";
 import App from "./App";
+import {AdminPage} from "./pages/AdminPage.tsx";
 
 const elem = document.getElementById("root")!;
 
@@ -29,8 +30,12 @@ const app = (
                     element: <App />
                 },
                 {
-                   path: "/inventory", 
+                    path: "/inventory",
                     element:<InventoryPage/>
+                },
+                {
+                    path: "/admin",
+                    element: <AdminPage />
                 }
             ])}
         />

@@ -4,7 +4,6 @@ import {createProduct} from "../api/products.ts";
 
 export function CreateListingPage() {
     const navigate = useNavigate();
-    const sellerId = Number(localStorage.getItem("satinroad_user_id"));
     const [productName, setProductName] = useState("");
     const [description, setDescription] = useState("");
     const [category, setCategory] = useState("");
@@ -18,7 +17,7 @@ export function CreateListingPage() {
         event.preventDefault();
         setError(null);
 
-        if (!Number.isInteger(sellerId) || sellerId <= 0) {
+        if (!localStorage.getItem("satinroad_token")) {
             setError("Please sign in again before creating a listing.");
             return;
         }
@@ -28,7 +27,6 @@ export function CreateListingPage() {
         try {
             const product = await createProduct({
                 productName: productName.trim(),
-                sellerId,
                 description: description.trim(),
                 category: category.trim(),
                 price: Number(price),
@@ -50,7 +48,7 @@ export function CreateListingPage() {
 
     return (
         <main style={{maxWidth: 600, padding: 24}}>
-            <Link 
+            <Link
                 to="/"
                 style={headerButtonStyle}
             >Back</Link>
