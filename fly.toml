@@ -1,0 +1,30 @@
+# fly.toml app configuration file generated for better-silkroad on 2026-10-08T16:58:17+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'better-silkroad'
+primary_region = 'arn'
+
+[build]
+  dockerfile = 'Dockerfile'
+
+[env]
+  ASPNETCORE_URLS = 'http://0.0.0.0:8080'
+  ConnectionStrings__DefaultConnection = 'Data Source=/data/satinroad.db'
+
+[[mounts]]
+  source = 'data'
+  destination = '/data'
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 1
+
+[[vm]]
+  memory = '256mb'
+  cpus = 1
+  memory_mb = 256

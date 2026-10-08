@@ -17,7 +17,11 @@ builder.Services.AddOpenApiDocument();
 
 builder.Services.AddLinqToDBContext<DatabaseConnection>((provider, options) =>
     options
-        .UseSQLite(builder.Configuration.GetConnectionString("Default") ?? "Data Source=satinroad.db", SQLiteProvider.Microsoft)
+        .UseSQLite(
+            builder.Configuration.GetConnectionString("DefaultConnection")
+                ?? builder.Configuration.GetConnectionString("Default")
+                ?? "Data Source=satinroad.db",
+            SQLiteProvider.Microsoft)
         .UseDefaultLogging(provider));
 
 builder.Services.AddScoped<AuthService>();
@@ -32,7 +36,7 @@ builder.Services.AddScoped<PurchaseService>();
 // action checks that claim.
 var jwtSection = builder.Configuration.GetSection("Jwt");
 var jwtSecret = jwtSection["Secret"]
-    ?? throw new InvalidOperationException("Jwt:Secret is not configured (check appsettings.Development.json).");
+    ?? throw new InvalidOperationException("Jwt:Secret is not configured. Set Jwt__Secret in the deployment environment.");
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -83,7 +87,10 @@ using (var scope = app.Services.CreateScope())
 app.UseCors("Frontend");
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.MapControllers();
 app.UseOpenApi();
 app.UseSwaggerUi();
+app.MapFallbackToFile("index.html");
 app.Run();

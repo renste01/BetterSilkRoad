@@ -5,7 +5,7 @@ import {authHeaders, deleteProduct, getProducts, updateProduct} from "../api/pro
 import {COLOURS} from "../Colours.tsx";
 
 interface Category { id: number; name: string; description: string | null; }
-const API = "http://localhost:5153/api";
+const API = "/api";
 const inputStyle: React.CSSProperties = {padding: 8, background: COLOURS.surface, color: COLOURS.text, border: `1px solid ${COLOURS.border}`, width: "100%", boxSizing: "border-box"};
 const buttonStyle: React.CSSProperties = {padding: "8px 12px", border: 0, background: COLOURS.accent, color: COLOURS.bg, cursor: "pointer"};
 

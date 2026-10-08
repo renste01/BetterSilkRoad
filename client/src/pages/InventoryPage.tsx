@@ -14,7 +14,7 @@ interface InventoryItem {
     images: string | null;
 }
 
-const API_BASE = "http://localhost:5153/api";
+const API_BASE = "/api";
 
 function authHeaders(): Record<string, string> {
     const token = localStorage.getItem("satinroad_token") ?? "";

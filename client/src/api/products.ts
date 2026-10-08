@@ -1,6 +1,6 @@
 import type {CreateProductRequest, Product} from "../Interface.tsx";
 
-const API_URL = "http://localhost:5153";
+const API_URL = "";
 
 export function authHeaders(json = false): Record<string, string> {
     const token = localStorage.getItem("satinroad_token");
