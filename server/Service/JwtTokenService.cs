@@ -14,7 +14,7 @@ public class JwtTokenService(IConfiguration configuration)
         var jwtSection = configuration.GetSection("Jwt");
         var secret = jwtSection["Secret"]
                      ?? throw new InvalidOperationException(
-                         "Jwt:Secret is not configured (check appsettings.Development.json).");
+                         "Jwt:Secret is not configured. Set Jwt__Secret in the deployment environment.");
         var issuer = jwtSection["Issuer"] ?? "SatinRoad";
         var audience = jwtSection["Audience"] ?? "SatinRoad";
 

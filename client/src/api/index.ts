@@ -1,6 +1,6 @@
 ﻿import { Api } from "./Api";
 
-// One shared client instance, pointed at the backend.
-export const api = new Api({ baseUrl: "http://localhost:5153" });
+// The frontend and backend share one origin after deployment.
+export const api = new Api({ baseUrl: "" });
 
 export * from "./Api";

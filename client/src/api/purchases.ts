@@ -1,7 +1,7 @@
 ﻿import type {CheckoutItem, Purchase} from "../Interface.tsx";
 import {authHeaders} from "./products.ts";
 
-const API_URL = "http://localhost:5153";
+const API_URL = "";
 
 export async function checkout(items: CheckoutItem[]): Promise<Purchase[]> {
     const response = await fetch(`${API_URL}/api/purchases/checkout`, {
